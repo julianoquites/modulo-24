@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write  # Permissão para escrever no repositório
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,7 +37,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: mochawesome-report
-        path: mochawesome-report/mochawesome.html  # Atualizado para o caminho correto
+        path: mochawesome-report/mochawesome.html
 
     - name: Check if report exists
       run: |
@@ -50,7 +53,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        mv mochawesome-report/mochawesome.html ./index.html  # Atualizado para o caminho correto
+        mv mochawesome-report/mochawesome.html ./index.html
         git init
         git checkout -b gh-pages
         git add index.html
