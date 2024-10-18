@@ -27,11 +27,23 @@ jobs:
     - name: Run API tests and generate Mochawesome report
       run: npm run test:report
 
+    - name: List files in reports directory
+      run: ls -la reports
+
     - name: Upload Mochawesome report as an artifact
       uses: actions/upload-artifact@v3
       with:
         name: mochawesome-report
         path: reports/my-report.html
+
+    - name: Check if report exists
+      run: |
+        if [ -f reports/my-report.html ]; then
+          echo "Report exists."
+        else
+          echo "Report does not exist."
+          exit 1
+        fi
 
     - name: Deploy to GitHub Pages
       if: success()  # Publica apenas se os testes passarem
