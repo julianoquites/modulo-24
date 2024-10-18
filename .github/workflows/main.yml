@@ -34,11 +34,11 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: mochawesome-report
-        path: mochawesome-report/my-report.html
+        path: mochawesome-report/mochawesome.html  # Atualizado para o caminho correto
 
     - name: Check if report exists
       run: |
-        if [ -f mochawesome-report/my-report.html ]; then
+        if [ -f mochawesome-report/mochawesome.html ]; then
           echo "Report exists."
         else
           echo "Report does not exist."
@@ -50,7 +50,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        mv mochawesome-report/my-report.html ./index.html
+        mv mochawesome-report/mochawesome.html ./index.html  # Atualizado para o caminho correto
         git init
         git checkout -b gh-pages
         git add index.html
