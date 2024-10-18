@@ -1,0 +1,46 @@
+name: Run API Tests and Publish Report
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run API tests and generate Mochawesome report
+      run: npm run test:report
+
+    - name: Upload Mochawesome report as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: mochawesome-report
+        path: reports/my-report.html
+
+    - name: Deploy to GitHub Pages
+      if: success()  # Publica apenas se os testes passarem
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        mv reports/my-report.html ./index.html
+        git init
+        git checkout -b gh-pages
+        git add index.html
+        git commit -m 'Deploy Mochawesome Report to GitHub Pages'
+        git push --force --quiet "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
